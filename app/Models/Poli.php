@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Poli extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+
+    protected $fillable = ['nama', 'biaya'];
 }

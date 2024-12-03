@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pasien;
 use Illuminate\Support\Facades\Storage;
 
 class PasienController extends Controller
@@ -13,8 +12,14 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $pasien = Pasien::latest()->paginate(10);
-        return view('pasien_index', compact('pasien'));
+        if (request()->has('q')) {
+            $pasien = \App\Models\Pasien::search(request('q'))->paginate(10);
+        } else {
+            $pasien = \App\Models\Pasien::latest()->paginate(10);
+        }
+
+        $data['pasien'] = $pasien;
+        return view('pasien_index', $data);
     }
 
     /**
@@ -52,15 +57,23 @@ class PasienController extends Controller
         $pasien->save();
         return redirect('/pasien')->with('pesan', 'Data sudah disimpan');
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $pasien = Pasien::findOrFail($id);
-        return view('pasien_edit', compact('pasien'));
+        $data['pasien'] = \App\Models\Pasien::findOrFail($id);
+        return view('pasien_edit', $data);
     }
-    
 
     /**
      * Update the specified resource in storage.
@@ -93,19 +106,21 @@ class PasienController extends Controller
         $pasien->save();
         return redirect('/pasien')->with('pesan', 'Data sudah diubah');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        $pasien = Pasien::findOrFail($id);
-        if ($pasien->foto) {
-            Storage::delete('public/images/' . $pasien->foto);
+        $pasien = \App\Models\Pasien::findOrFail($id);
+       if ($pasien->daftar->count() > 0) {
+           //flash('danger', 'Data tidak dapat dihapus, karena sudah terdaftar di daftar pasien')->error();
+           return redirect('/pasien');
+       }
+       if (Storage::exists('public/images/' . $pasien->foto)){
+            Storage::delete('/public/images/' . $pasien->foto);
         }
         $pasien->delete();
-
-        return back()->with('pesan', 'Data sudah dihapus');
+        return redirect('/pasien')->with('pesan', 'Data sudah dihapus');
     }
-}
-//By Pratama Putra A
+}//By Pratama Putra A

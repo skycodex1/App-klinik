@@ -19,7 +19,7 @@
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
                     <a href="." class="text-nowrap logo-img">
-                        <img src="/modern/src/assets/images/logos/webpro.png" width="180" alt="" />
+                        <img src="/modern/src/assets/images/logos/web.jpeg" width="145" alt="" />
                     </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <i class="ti ti-x fs-8"></i>
@@ -41,13 +41,15 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/daftar" aria-expanded="false">
+                            <a class="sidebar-link {{ request()->is('daftar*') ? 'active' : '' }}" href="/daftar"
+                                aria-expanded="false">
                                 <span>
-                                    <i class="ti ti-clipboard"></i>
+                                    <i class="ti ti-user"></i>
                                 </span>
-                                <span class="hide-menu">Pendaftaran</span>
+                                <span class="hide-menu">Data Pendaftaran</span>
                             </a>
                         </li>
+                        
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/pasien" aria-expanded="false">
                                 <span>
